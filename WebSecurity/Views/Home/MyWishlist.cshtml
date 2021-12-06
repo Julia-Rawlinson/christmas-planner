@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Gift>
+
+@{
+    ViewData["Title"] = "Christmas Planner";
+}
+
+<h1>My Wishlist</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Action</th>
+    </tr>
+    @foreach (Gift gift in Model)
+    {
+        <tr>
+            <td>@gift.Title</td>
+            <td>@gift.Price</td>
+            <td>@gift.Description</td>
+            <td>
+                <form asp-controller="Home" asp-action="DeleteGift" asp-route-id="@gift.GiftId" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="float-start">
+    <a asp-controller="Home" asp-action="AddGift" class="btn btn-success">Add Another Gift</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-danger">Back</a>
+</div>

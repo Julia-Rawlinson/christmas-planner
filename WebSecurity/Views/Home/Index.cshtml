@@ -1,0 +1,48 @@
+﻿@model IEnumerable<AppUser>
+
+@{
+    ViewData["Title"] = "Christmas Planner - Home";
+}
+
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    <div class="jumbotron bg-light mb-4 p-4">
+        <h1>Hello, @User.Identity.Name</h1>
+        <p class="lead">
+            Welcome to your Christmas planner. Search for friends below to see what they want for Christmas,
+            or visit your wishlist to add items to your own list. Add items to your shopping list to keep track of
+            what you need to buy.
+        </p>
+        <div class="float-end mb-4">
+            <a asp-controller="Home" asp-action="MyWishlist" class="btn btn-lg btn-success" role="button">Go To Wishlist »</a>
+            <a class="btn btn-lg btn-success" role="button">Go To Shopping List »</a>
+        </div>
+
+    </div>
+
+    <form class="input-group rounded my-4" method="post">
+        <input name="search" type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+               aria-describedby="search-addon" />
+        <span class="input-group-text border-0" id="search-addon">
+            <i class="fas fa-search"></i>
+        </span>
+    </form>
+
+    <table class="table table-sm table-bordered">
+        <tr>
+            <th>Userame</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        @foreach (AppUser user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <a asp-controller="Home" asp-action="ViewFriend" asp-route-id="@user.Id" class="btn btn-success">View</a>
+                </td>
+            </tr>
+        }
+    </table>
+}
