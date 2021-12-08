@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebSecurity.Models
 {
+    
     public interface IGiftRepository
     {
         IQueryable<Gift> Gifts { get; }
