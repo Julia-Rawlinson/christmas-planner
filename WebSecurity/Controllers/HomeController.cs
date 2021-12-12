@@ -49,6 +49,14 @@ namespace WebSecurity.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> MyShoppingList()
+        {
+            AppUser user = await _userManager.GetUserAsync(HttpContext.User);
+            var gifts = _giftRepository.UserShoppingList(user);
+            return View(gifts);
+        }
+
+        [Authorize]
         [HttpGet]
         public IActionResult AddGift()
         {
@@ -57,10 +65,19 @@ namespace WebSecurity.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        public IActionResult AddShoppingList()
+        {
+            Gift gift = new Gift();
+            return View(gift);
+        }
+
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddGift(Gift gift)
+        public async Task<IActionResult> AddGift(Gift gift, bool isWish)
         {
             AppUser user = await _userManager.GetUserAsync(HttpContext.User);
+      
             if (user != null)
             {
                 gift.IsWish = true;
@@ -75,10 +92,32 @@ namespace WebSecurity.Controllers
             return RedirectToAction("MyWishlist", "Home");
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> AddShoppingList(Gift gift, bool isWish)
+        {
+            AppUser user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (user != null)
+            {
+                gift.IsWish = false;
+                gift.UserID = user.Id;
+                gift.AppUser = user;
+                _giftRepository.AddGift(gift);
+
+            }
+            else
+            {
+                ModelState.AddModelError("", "User Not Found");
+            }
+            return RedirectToAction("MyShoppingList", "Home");
+        }
+
         [HttpPost]
         public IActionResult DeleteGift(int id)
         {
             Gift gift = _giftRepository.Gifts.First(g => g.GiftId == id);
+
             if (gift != null)
             {
                 _giftRepository.DeleteGift(gift);
@@ -86,10 +125,12 @@ namespace WebSecurity.Controllers
             {
                 ModelState.AddModelError("", "Error finding gift");
             }
-            return RedirectToAction("MyWishlist");
+
+            if (gift.IsWish)
+            {
+                return RedirectToAction("MyWishlist");
+            }
+            return RedirectToAction("MyShoppingList");
         }
-                
-
-
     }
 }

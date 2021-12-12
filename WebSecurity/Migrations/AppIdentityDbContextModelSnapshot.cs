@@ -222,7 +222,11 @@ namespace WebSecurity.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AppUserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsWish")
@@ -232,6 +236,7 @@ namespace WebSecurity.Migrations
                         .HasColumnType("decimal(8,2)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
@@ -239,9 +244,11 @@ namespace WebSecurity.Migrations
 
                     b.HasKey("GiftId");
 
+                    b.HasIndex("AppUserId1");
+
                     b.HasIndex("UserID");
 
-                    b.ToTable("Gifts");
+                    b.ToTable("Gift");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -297,6 +304,10 @@ namespace WebSecurity.Migrations
 
             modelBuilder.Entity("WebSecurity.Models.Gift", b =>
                 {
+                    b.HasOne("WebSecurity.Models.AppUser", null)
+                        .WithMany("ShoppingList")
+                        .HasForeignKey("AppUserId1");
+
                     b.HasOne("WebSecurity.Models.AppUser", "AppUser")
                         .WithMany("Gifts")
                         .HasForeignKey("UserID");
@@ -307,6 +318,8 @@ namespace WebSecurity.Migrations
             modelBuilder.Entity("WebSecurity.Models.AppUser", b =>
                 {
                     b.Navigation("Gifts");
+
+                    b.Navigation("ShoppingList");
                 });
 #pragma warning restore 612, 618
         }
