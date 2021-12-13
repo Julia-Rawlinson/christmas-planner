@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\NewFolder\**" />
+    <Content Remove="Views\NewFolder\**" />
+    <EmbeddedResource Remove="Views\NewFolder\**" />
+    <None Remove="Views\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\UserApiController.cs" />
     <Compile Remove="Models\HomeController.cs" />
   </ItemGroup>
 
