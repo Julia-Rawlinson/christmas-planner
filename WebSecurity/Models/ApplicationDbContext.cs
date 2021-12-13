@@ -11,7 +11,7 @@ namespace WebSecurity.Models
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<Gift> Gifts { get; set; }
+        public DbSet<Gift> Gift { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,9 @@ namespace WebSecurity.Models
                 .HasOne(c => c.AppUser)
                 .WithMany(t => t.Gifts)
                 .HasForeignKey(s => s.UserID);
-            
+
+
+
         }
 
     }
